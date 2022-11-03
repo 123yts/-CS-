@@ -1,6 +1,7 @@
 package com.yts.system.view.handler;
 
 import com.yts.system.constant.BookConstant;
+import com.yts.system.controller.BookController;
 import com.yts.system.net.TCPClient;
 import com.yts.system.util.Protocol;
 import com.yts.system.view.MainView;
@@ -14,6 +15,8 @@ import java.awt.event.ActionListener;
 public class MainViewHandler implements ActionListener {
 
     private MainView mainView;
+
+    private BookController bookController = new BookController();
 
     public MainViewHandler(MainView mainView){
         this.mainView = mainView;
@@ -42,8 +45,9 @@ public class MainViewHandler implements ActionListener {
             int option = JOptionPane.showConfirmDialog(mainView,"确定要删除这" + numbers.length + "行数据吗？",
                     "确认删除", JOptionPane.YES_NO_OPTION);
             if (option == JOptionPane.YES_OPTION){
-                TCPClient tcpConnection = TCPClient.getConnection();
-                String response = tcpConnection.request(Protocol.deleteBookRequest(numbers));
+//                TCPClient tcpConnection = TCPClient.getConnection();
+//                String response = tcpConnection.request(Protocol.deleteBookRequest(numbers));
+                String response = bookController.deleteBookByNumbers(numbers);
                 //boolean result = new BookService().deleteBook(numbers);
                 if (BookConstant.SUCCESS.equals(response)){
                     JOptionPane.showMessageDialog(mainView, "删除成功!");

@@ -1,5 +1,6 @@
 package com.yts.system.view.page;
 
+import com.yts.system.controller.BookController;
 import com.yts.system.model.Book;
 import com.yts.system.net.TCPClient;
 import com.yts.system.util.Parser;
@@ -27,6 +28,8 @@ public class BookUpdateView extends JDialog {
 
     JButton updateButton = new JButton("修改");
 
+    private BookController bookController = new BookController();
+
     public BookUpdateView(MainView mainView, int number){
         super(mainView,"修改图书",true);
 
@@ -37,8 +40,8 @@ public class BookUpdateView extends JDialog {
         //数据回显
         //Book book = new BookDao().getBookByNumber(number);
         TCPClient tcpConnection = TCPClient.getConnection();
-        String response = tcpConnection.request(Protocol.queryBookByNumberRequest(number));
-        Book book = Parser.getBook(response);
+//        String response = tcpConnection.request(Protocol.queryBookByNumberRequest(number));
+        Book book = bookController.queryBookByNumber(number);
 
         numberLable.setPreferredSize(new Dimension(150, 30));
         jPanel.add(numberLable);

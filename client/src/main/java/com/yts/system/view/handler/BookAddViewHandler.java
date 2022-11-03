@@ -1,6 +1,7 @@
 package com.yts.system.view.handler;
 
 import com.yts.system.constant.BookConstant;
+import com.yts.system.controller.BookController;
 import com.yts.system.model.Book;
 import com.yts.system.net.TCPClient;
 import com.yts.system.util.Parser;
@@ -16,6 +17,7 @@ public class BookAddViewHandler implements ActionListener {
 
     private BookAddView bookAddView;
     private MainView mainView;
+    private BookController bookController = new BookController();
 
     public BookAddViewHandler(MainView mainView, BookAddView bookAddView){
         this.bookAddView = bookAddView;
@@ -35,17 +37,16 @@ public class BookAddViewHandler implements ActionListener {
 //            }
 //            boolean result = new BookService().addBook(book);
             //Todo
-            TCPClient tcpConnection = TCPClient.getConnection();
 
-            String response = tcpConnection.request(Protocol.queryBookByNumberRequest(bookAddView.getBook().getNumber()));
+            Book book = bookController.queryBookByNumber(bookAddView.getBook().getNumber());
 //            System.out.println("比较：" + BookConstant.FAILURE.equals(response));
 //            System.out.println("find： " + response);
-            if (!BookConstant.FAILURE.equals(response)){
+            if (book != null){
                 JOptionPane.showMessageDialog(bookAddView, "该书已收录在系统中，请勿重复添加！");
                 return;
             }
 
-            response = tcpConnection.request(Protocol.addBookRequest(bookAddView.getBook()));
+            String response = bookController.addBook(bookAddView.getBook());
             if(BookConstant.SUCCESS.equals(response)){
                 //刷新主界面
                 mainView.reloadView();

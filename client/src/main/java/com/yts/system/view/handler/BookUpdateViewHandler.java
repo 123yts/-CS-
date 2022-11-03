@@ -1,6 +1,7 @@
 package com.yts.system.view.handler;
 
 import com.yts.system.constant.BookConstant;
+import com.yts.system.controller.BookController;
 import com.yts.system.net.TCPClient;
 import com.yts.system.util.Protocol;
 import com.yts.system.view.MainView;
@@ -14,6 +15,7 @@ public class BookUpdateViewHandler implements ActionListener {
 
     private BookUpdateView bookUpdateView;
     private MainView mainView;
+    private BookController bookController = new BookController();
 
     public BookUpdateViewHandler(MainView mainView, BookUpdateView bookUpdateView){
         this.bookUpdateView = bookUpdateView;
@@ -25,9 +27,9 @@ public class BookUpdateViewHandler implements ActionListener {
         JButton jButton = (JButton) e.getSource();
         String text = jButton.getText();
         if ("修改".equals(text)){
-            TCPClient tcpConnection = TCPClient.getConnection();
-            String response = tcpConnection.request(Protocol.updateBookRequest(bookUpdateView.getBook()));
-            //boolean result = new BookService().updateBook(bookUpdateView.getBook());
+//            TCPClient tcpConnection = TCPClient.getConnection();
+//            String response = tcpConnection.request(Protocol.updateBookRequest(bookUpdateView.getBook()));
+            String response = bookController.updateBookByNumber(bookUpdateView.getBook());
             if(BookConstant.SUCCESS.equals(response)){
                 mainView.reloadView();
                 JOptionPane.showMessageDialog(bookUpdateView, "修改成功！");

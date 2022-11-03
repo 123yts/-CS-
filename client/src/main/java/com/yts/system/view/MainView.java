@@ -1,5 +1,6 @@
 package com.yts.system.view;
 
+import com.yts.system.controller.BookController;
 import com.yts.system.net.TCPClient;
 import com.yts.system.util.Parser;
 import com.yts.system.util.Protocol;
@@ -32,6 +33,8 @@ public class MainView extends JFrame {
     MainViewTable mainViewTable = new MainViewTable();
     MainViewHandler mainViewHandler = new MainViewHandler(this);
 
+    BookController bookController = new BookController();
+
     TCPClient tcpConnection = TCPClient.getConnection();
     //当前页数
     private int pageNow = 1;
@@ -63,12 +66,12 @@ public class MainView extends JFrame {
 
         //中部组件，表格(使用JScrollPane包装）
         //初始化首页表格，查询数据库前十条数据
-        String response = tcpConnection.request(Protocol.getTotalCountByNameRequest("#"));
+        //String response = tcpConnection.request(Protocol.getTotalCountByNameRequest("#"));
+        String response = bookController.getTotalCountByName("#");
         //控制按钮显示
         showPageBtn(Integer.parseInt(response));
         //填充数据
-        response = tcpConnection.request(Protocol.queryBookByNameRequest("#", pageNow, pageSize));
-        Vector<Vector<Object>> data = Parser.getTableData(response);
+        Vector<Vector<Object>> data = bookController.queryBookListByName("#", pageNow, pageSize);
 
         MainViewTableModel mainViewTableModel = MainViewTableModel.assembleModel(data);
         mainViewTable.setModel(mainViewTableModel);
@@ -121,10 +124,9 @@ public class MainView extends JFrame {
     public void reloadView(){
         String name = searchText.getText();
         if ("".equals(name)) name = "#";
-        showPageBtn(Integer.parseInt(tcpConnection.request(Protocol.getTotalCountByNameRequest(name))));
+        showPageBtn(Integer.parseInt(bookController.getTotalCountByName(name)));
 //        showPageBtn(bookService.getBookTotalCountByName(name));
-        String respose = tcpConnection.request(Protocol.queryBookByNameRequest(name, pageNow, pageSize));
-        Vector<Vector<Object>> data = Parser.getTableData(respose);
+        Vector<Vector<Object>> data = bookController.queryBookListByName(name, pageNow, pageSize);
 //        Vector<Vector<Object>> data = bookService.getBookListByName(name, pageNow, pageSize);
         MainViewTableModel.updateData(data);
         mainViewTable.renderRule();
