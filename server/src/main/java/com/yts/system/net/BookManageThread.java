@@ -33,16 +33,14 @@ public class BookManageThread implements Runnable{
                 String request = br.readLine();
                 System.out.println("request: " + request);
 
-                //响应报文
-                String response = null;
-
                 //客户端是否要断开连接
                 if (BookConstant.DISCONNECT.equals(request)){
-                    response = BookConstant.DISCONNECT;
                     break;
-                }else {
-                   response = bookController.response(request);
                 }
+
+                //响应报文
+                String response = null;
+                response = bookController.response(request);
 
                 out.write((response + "\n").getBytes(StandardCharsets.UTF_8));
                 System.out.println("response: " + response);

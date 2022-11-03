@@ -13,15 +13,15 @@ public class Parser {
         return strings;
     }
 
-    // | 分割每一本book
-    public static List<Book> getBookList(String data){
-        String[] bookStrs = data.split("\\|");
-        List<Book> bookList = new ArrayList<>();
-        for (int i = 0; i < bookStrs.length; i++) {
-            bookList.add(getBook(bookStrs[i]));
-        }
-        return bookList;
-    }
+//    // | 分割每一本book
+//    public static List<Book> getBookList(String data){
+//        String[] bookStrs = data.split("\\|");
+//        List<Book> bookList = new ArrayList<>();
+//        for (int i = 0; i < bookStrs.length; i++) {
+//            bookList.add(getBook(bookStrs[i]));
+//        }
+//        return bookList;
+//    }
 
     // ; 分割每一本书的每一个字段
     public static Book getBook(String bookStr){
