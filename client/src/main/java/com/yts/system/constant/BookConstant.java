@@ -10,5 +10,7 @@ public class BookConstant {
     public static final String SUCCESS = "200";
     public static final String FAILURE = "404";
     public static final String DISCONNECT = "88";
+    public static final String REQUEST = "REQUEST";
+    public static final String DATA = "DATA";
 
 }

@@ -40,7 +40,7 @@ public class BookController {
     }
 
     public Vector<Vector<Object>> queryBookListByName(String name, int pageNow, int pageSize){
-        String response = tcpConnection.request(Protocol.queryBookByNameRequest("#", pageNow, pageSize));
+        String response = tcpConnection.request(Protocol.queryBookByNameRequest(name, pageNow, pageSize));
         Vector<Vector<Object>> data = Parser.getTableData(response);
         return data;
     }

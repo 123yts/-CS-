@@ -124,6 +124,7 @@ public class MainView extends JFrame {
     public void reloadView(){
         String name = searchText.getText();
         if ("".equals(name)) name = "#";
+        System.out.println("name； " + name);
         showPageBtn(Integer.parseInt(bookController.getTotalCountByName(name)));
 //        showPageBtn(bookService.getBookTotalCountByName(name));
         Vector<Vector<Object>> data = bookController.queryBookListByName(name, pageNow, pageSize);

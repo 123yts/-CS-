@@ -1,65 +1,68 @@
 package com.yts.system.util;
 
+import com.alibaba.fastjson2.JSON;
 import com.yts.system.constant.BookConstant;
 import com.yts.system.model.Book;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Protocol {
 
 
     public static String addBookRequest(Book book){
-        StringBuffer request = new StringBuffer();
-        request.append(BookConstant.ADD).append("&").
-                append(book.getNumber()).append(";").
-                append(book.getName()).append(";").
-                append(book.getAuthor()).append(";").
-                append(book.getPublisher()).append(";").
-                append(book.getPrice()).append(";").
-                append(book.isBorrowed() ? "1" : "0");
-        return request.toString();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put(BookConstant.REQUEST, BookConstant.ADD);
+        map.put(BookConstant.DATA, book);
+        return JSON.toJSONString(map);
     }
 
     public static String updateBookRequest(Book book){
-        StringBuffer request = new StringBuffer();
-        request.append(BookConstant.UPDATE).append("&").
-                append(book.getNumber()).append(";").
-                append(book.getName()).append(";").
-                append(book.getAuthor()).append(";").
-                append(book.getPublisher()).append(";").
-                append(book.getPrice()).append(";").
-                append(book.isBorrowed() ? "1" : "0");
-        return request.toString();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put(BookConstant.REQUEST, BookConstant.UPDATE);
+        map.put(BookConstant.DATA, book);
+        return JSON.toJSONString(map);
     }
 
     public static String deleteBookRequest(int[] numbers){
-        StringBuffer request = new StringBuffer();
-        request.append(BookConstant.DELETE).append("&");
+
+        Map<String, Object> map = new HashMap<>();
+        map.put(BookConstant.REQUEST, BookConstant.DELETE);
+        Map<String, Integer> numberMap = new HashMap<>();
         for (int i = 0; i < numbers.length; i++) {
-            request.append("" + numbers[i]);
-            if (i < numbers.length - 1) request.append("|");
+            numberMap.put("" + numbers[i], Integer.valueOf(numbers[i]));
         }
-        return request.toString();
+        map.put(BookConstant.DATA, numberMap);
+        return JSON.toJSONString(map);
     }
 
     public static String queryBookByNameRequest(String bookName, int pageNow, int pageSize){
-        StringBuffer request = new StringBuffer();
-        request.append(BookConstant.QUERY).append("&");
-        request.append(bookName).append("|").
-                append(pageNow).append("|").
-                append(pageSize);
-        return request.toString();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put(BookConstant.REQUEST, BookConstant.QUERY);
+        Map<String, Object> query = new HashMap<>();
+        query.put("bookName", bookName);
+        query.put("pageNow", pageNow);
+        query.put("pageSize", pageSize);
+        map.put(BookConstant.DATA, query);
+        return JSON.toJSONString(map);
     }
 
     public static String getTotalCountByNameRequest(String name){
-        StringBuffer request = new StringBuffer();
-        request.append(BookConstant.QUERY_TOTAL_COUNT).append("&");
-        request.append(name);
-        return request.toString();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put(BookConstant.REQUEST, BookConstant.QUERY_TOTAL_COUNT);
+        map.put(BookConstant.DATA, name);
+        return JSON.toJSONString(map);
     }
 
     public static String queryBookByNumberRequest(int number){
-        StringBuffer request = new StringBuffer();
-        request.append(BookConstant.QUERY_BY_NUMBER).append("&");
-        request.append(number);
-        return request.toString();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put(BookConstant.REQUEST, BookConstant.QUERY_BY_NUMBER);
+        map.put(BookConstant.DATA, number);
+        return JSON.toJSONString(map);
     }
 }

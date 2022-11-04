@@ -1,53 +1,49 @@
 package com.yts.system.util;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.yts.system.model.Book;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Parser {
 
-    public static String[] getActionAndData(String request){
-        // & 分割请求类型和数据
-        String[] strings = request.split("&");
-        return strings;
+    public static Map getActionAndData(String request){
+
+        Map map = JSONObject.parseObject(request, Map.class);
+        return map;
     }
 
-//    // | 分割每一本book
-//    public static List<Book> getBookList(String data){
-//        String[] bookStrs = data.split("\\|");
-//        List<Book> bookList = new ArrayList<>();
-//        for (int i = 0; i < bookStrs.length; i++) {
-//            bookList.add(getBook(bookStrs[i]));
-//        }
-//        return bookList;
-//    }
-
-    // ; 分割每一本书的每一个字段
-    public static Book getBook(String bookStr){
-        String[] strs = bookStr.split(";");
-        return new Book(Integer.parseInt(strs[0]), strs[1], strs[2], strs[3],
-                Double.parseDouble(strs[4]), "1".equals(strs[5]));
+    public static Book getBook(Object bookStr){
+        return JSONObject.parseObject(JSONObject.toJSONString(bookStr), Book.class);
     }
 
-    public static int[] getBookNumbers(String numberStr){
-        String[] strs = numberStr.split("\\|");
-        int[] numbers = new int[strs.length];
-        for (int i = 0; i < strs.length; i++) {
-            numbers[i] = Integer.parseInt(strs[i]);
+    public static int[] getBookNumbers(Object numbers){
+        Map<String, Integer> map = (Map<String, Integer>)numbers;
+        int[] nums = new int[map.size()];
+        Iterator<Map.Entry<String, Integer>> iterator = map.entrySet().iterator();
+        int i=0;
+        while (iterator.hasNext()){
+            nums[i] = iterator.next().getValue();
         }
-        return numbers;
+        return nums;
     }
 
-    // | 分割 bookName、pageNow、 pageSize
-    public static String[] getBookQuery(String query){
-        String[] strs = query.split("\\|");
+    // bookName、pageNow、 pageSize
+    public static String[] getBookQuery(Object query){
+
+        JSONObject jsonObject = (JSONObject)query;
+        String[] strs = new String[3];
+        strs[0] = (String) jsonObject.get("bookName");
+        Integer pageNow = (Integer)jsonObject.get("pageNow");
+        Integer pageSize = (Integer)jsonObject.get("pageSize");
+        strs[1] = pageNow + "";
+        strs[2] = pageSize + "";
         return strs;
     }
 
-    public static int getBookNumber(String request){
-        String[] strings = request.split("&");
-        return Integer.parseInt(strings[1]);
+    public static int getBookNumber(Object request){
+        Integer number = (Integer) request;
+        return number.intValue();
     }
 
 }
